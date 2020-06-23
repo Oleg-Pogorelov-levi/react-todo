@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import TodoTitle from './Todos/TodoTitle';
 import './App.css';
+import TodoInput from './Todos/TodoInput';
+import TodoList from './Todos/TodoList';
+import TodoFooter from './Todos/TodoFooter';
 
 function App() {
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todo')) || []);
+  localStorage.setItem('todo', JSON.stringify(todos));
+
+  function addTodo(value) {
+    setTodos(
+      todos.concat([{id: Date.now(), title: value, completed: false}])
+    )
+  }
+
+  function todoCompleted(id) {
+    setTodos(
+      todos.map(todo => {
+        if (todo.id === id){
+          todo.completed = !todo.completed
+        }
+        return todo
+      })
+    )
+  }
+
+  function removeTodo(id){
+    setTodos(todos.filter(todo => todo.id !== id))
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <TodoTitle />
+      <TodoInput addTodo={addTodo}/>
+      <TodoList todos={todos} todoCompleted={todoCompleted} removeTodo={removeTodo} />
+      <TodoFooter />
     </div>
   );
-}
+};
 
 export default App;
