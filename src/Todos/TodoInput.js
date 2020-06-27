@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { TextField } from '@material-ui/core';
 
 function TodoInput({addTodo}){
     const [value, setValue] = useState('');
@@ -11,13 +12,14 @@ function TodoInput({addTodo}){
     }
 
     return (
-        <input 
+        <TextField
+            id="outlined-basic" 
+            variant="outlined" 
+            placeholder="What needs to be done?"
             value={value} 
             onChange={event => setValue(event.target.value)}
             onKeyDown={event => createTodo(event)} 
-            type="text" 
             tabIndex="0"
-            placeholder="What needs to be done?" 
         />
     );
 };

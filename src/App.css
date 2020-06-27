@@ -1,10 +1,60 @@
 .app {
-  display: flex;
-  margin: 0 auto;
+  margin-top: 10px;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  display: flex !important;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+}
+
+.todos-title {
+  font-size: 60px;
+  color: rgba(0, 0, 255, 0.3);
+  align-self: center;
 }
 
 .completed {
   color: grey;
+}
+
+.title-todo {
+  display: inline-block
+}
+
+.todo-item {
+  border: 1px solid gray;
+  list-style-type: none;
+  display: flex;
+  margin-left: -40px;
+}
+
+.delete-icon {
+  margin-left: auto;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.todo-edit-input {
+  width: 100%;
+  height: 100%;
+}
+
+.button-status {
+  min-width: 10% !important;
+  max-width: 40% !important;
+  font-size: 0.7rem !important;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.items-left {
+  align-self: center;
+}
+
+.button-clear {
+  font-size: 0.7rem !important;
+  width: 20%;
 }
