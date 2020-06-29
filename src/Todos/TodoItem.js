@@ -7,26 +7,15 @@ import DeleteIcon from '@material-ui/icons/Delete';
 function TodoItem(props){
     const [value, setValue] = useState(props.todo.title);
 
-    function saveTodo(event, id){
+    function onSaveTodo(event, id, value){
         if (event.keyCode === 13 && value.trim()){
-          props.setTodos(props.todos.map(todo => {
-            if (todo.id === id) {
-              todo.title = value
-              todo.isEdit = false
-            }
-            return todo
-          }))
+          props.saveTodo(id, value)
         }
     }
 
-    function canceleEditTodo(id){
+    function onCanceleEditTodo(id){
         setValue(props.todo.title)
-        props.setTodos(props.todos.map(todo => {
-            if (todo.id !== id) {
-            todo.isEdit = false
-            }
-            return todo
-        }))
+        props.canceleEditTodo(id)
     }
 
     if (props.todo.isEdit) {
@@ -39,7 +28,7 @@ function TodoItem(props){
                     placeholder="What needs to be done?"
                     value={value} 
                     onChange={event => setValue(event.target.value)}
-                    onKeyDown={event => saveTodo(event, props.todo.id)}
+                    onKeyDown={event => onSaveTodo(event, props.todo.id, value)}
                 />
             </li>
         )
@@ -47,7 +36,7 @@ function TodoItem(props){
         return (
             <li 
                 className={`todo-item ${props.todo.completed ? 'completed' : ''}`}
-                onClick={() => canceleEditTodo(props.todo.id)} 
+                onClick={() => onCanceleEditTodo(props.todo.id)} 
             >
                 <Checkbox 
                     icon={<RadioButtonUncheckedTwoToneIcon color="primary"/>} 

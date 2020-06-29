@@ -2,14 +2,17 @@ import React from 'react';
 import TodoItem from './TodoItem';
 
 function TodoList(props){
+    console.log('props list', props)
     let filteredTodos;
-    if (props.activeTodos) {
+
+    if (props.filters === 'SHOW_ACTIVE') {
         filteredTodos = props.todos.filter(todo => !todo.completed)
-    } else if (props.completedTodos) {
+    } else if (props.filters === 'SHOW_COMPLETED') {
         filteredTodos = props.todos.filter(todo => todo.completed)
     } else {
         filteredTodos = props.todos
     }
+
     return (
         <ul className="todo-list">
             {filteredTodos.map((todo, index) => {
@@ -22,6 +25,8 @@ function TodoList(props){
                     removeTodo={props.removeTodo}
                     editTodo={props.editTodo}
                     setTodos={props.setTodos}
+                    saveTodo={props.saveTodo}
+                    canceleEditTodo={props.canceleEditTodo}
                 />
                )
             })}

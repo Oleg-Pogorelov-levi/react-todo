@@ -18,9 +18,9 @@ function TodoFooter(props){
                 onChange={handleChange}
                 aria-label="disabled tabs example"
             >
-                <Tab className="button-status" label="All" onClick={() => props.showAllTodos()} />
-                <Tab className="button-status" label="Active" onClick={() => props.showActiveTodos()} />
-                <Tab className="button-status" label="Completed" onClick={() => props.showCompletedTodos()} />
+                <Tab className="button-status" label="All" onClick={() => props.setVisibilityFilter('SHOW_ALL')} />
+                <Tab className="button-status" label="Active" onClick={() => props.setVisibilityFilter('SHOW_ACTIVE')} />
+                <Tab className="button-status" label="Completed" onClick={() => props.setVisibilityFilter('SHOW_COMPLETED')} />
             </Tabs>
             {props.todos.filter(todo => todo.completed).length ? 
                 <Button

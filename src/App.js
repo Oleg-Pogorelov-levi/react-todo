@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TodoTitle from './Todos/TodoTitle';
 import './App.css';
 import TodoInput from './Todos/TodoInput';
@@ -7,92 +7,54 @@ import TodoFooter from './Todos/TodoFooter';
 
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { addTodo, removeTodo, editTodo, setVisibilityFilter, toggleTodo, saveTodo, canceleEditTodo, clearCompleted } from './actions';
+import { connect } from 'react-redux';
 
 
-function App() {
-  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todo')) || []);
-  const [activeTodos, setActiveTodos] = useState(false);
-  const [completedTodos, setCompletedTodos] = useState(false);
-
-  localStorage.setItem('todo', JSON.stringify(todos));
-
-  function addTodo(value) {
-    setTodos(
-      todos.concat([{
-        id: Date.now(), 
-        title: value, 
-        completed: false, 
-        isEdit: false
-      }])
-    )
-  }
-
-  function todoCompleted(id) {
-    setTodos(
-      todos.map(todo => {
-        if (todo.id === id){
-          todo.completed = !todo.completed
-        }
-        return todo
-      })
-    )
-  }
-
-  function removeTodo(id){
-    setTodos(todos.filter(todo => todo.id !== id))
-  }
-
-  function editTodo(id){
-    setTodos(todos.map(todo => {
-      if (todo.id === id) {
-        todo.isEdit = true
-      }
-      return todo
-    }))
-  }
-
-  function showActiveTodos(){
-    setActiveTodos(true);
-    setCompletedTodos(false);
-  }
-
-  function showAllTodos(){
-    setActiveTodos(false);
-    setCompletedTodos(false);
-  }
-
-  function showCompletedTodos(){
-    setActiveTodos(false);
-    setCompletedTodos(true);
-  }
-
-  function clearCompletedTodos(){
-    setTodos(todos.filter(todo => !todo.completed))
-  }
+function App(props) {
+  localStorage.setItem('todo', JSON.stringify(props.todos));
 
   return (
     <Container maxWidth="sm" className="app">
       <CssBaseline />
       <TodoTitle />
-      <TodoInput addTodo={addTodo}/>
+      <TodoInput addTodo={props.addTodoAction}/>
       <TodoList 
-        todos={todos} 
-        todoCompleted={todoCompleted} 
-        removeTodo={removeTodo} 
-        activeTodos={activeTodos}
-        completedTodos={completedTodos}
-        editTodo={editTodo}
-        setTodos={setTodos}
+        todos={props.todos}
+        filters={props.filters}
+        todoCompleted={props.toggleTodoAction} 
+        removeTodo={props.removeTodoAction} 
+        editTodo={props.editTodoAction}
+        saveTodo={props.saveTodoAction}
+        canceleEditTodo={props.canceleEditTodoAction}
       />
       <TodoFooter 
-        todos={todos} 
-        showActiveTodos={showActiveTodos} 
-        showAllTodos={showAllTodos} 
-        showCompletedTodos={showCompletedTodos}
-        clearCompletedTodos={clearCompletedTodos}
+        todos={props.todos}
+        setVisibilityFilter={props.setVisibilityFilterAction}
+        clearCompletedTodos={props.clearCompletedAction}
       />
     </Container>
   );
 };
 
-export default App;
+const mapStateToProps = store => {
+  return store
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addTodoAction: (title) => dispatch(addTodo(title)),
+    removeTodoAction: (id) => dispatch(removeTodo(id)),
+    editTodoAction: (id) => dispatch(editTodo(id)),
+    saveTodoAction: (id, value) => dispatch(saveTodo(id, value)),
+    canceleEditTodoAction: (id) => dispatch(canceleEditTodo(id)),
+    toggleTodoAction: (id) => dispatch(toggleTodo(id)),
+    setVisibilityFilterAction: (filter) => dispatch(setVisibilityFilter(filter)),
+    clearCompletedAction: () => dispatch(clearCompleted()),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
