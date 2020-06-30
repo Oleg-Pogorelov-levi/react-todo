@@ -24,6 +24,7 @@ export const getVisibleTodos = createSelector(
 function TodoFooter(props){
     const leftTodos = useMemo( () => props.todos.filter(todo => !todo.completed), [props.todos])
     const [value, setValue] = React.useState(2);
+    const completedTodo = props.todos.length - leftTodos.length;
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -50,7 +51,7 @@ function TodoFooter(props){
                     className="button-clear"
                     onClick={() => props.clearCompleted()}
                 >
-                    Clear completed [{props.todos.filter(todo => todo.completed).length}]
+                    Clear completed [{completedTodo}]
                 </Button>
              : 
                 <div className="button-clear"></div>}
