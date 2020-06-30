@@ -1,36 +1,44 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import TodoItem from './TodoItem';
+import { connect } from 'react-redux';
 
 function TodoList(props){
-    let filteredTodos;
-
-    if (props.filters === 'SHOW_ACTIVE') {
-        filteredTodos = props.todos.filter(todo => !todo.completed)
-    } else if (props.filters === 'SHOW_COMPLETED') {
-        filteredTodos = props.todos.filter(todo => todo.completed)
-    } else {
-        filteredTodos = props.todos
-    }
+    localStorage.setItem('todo', JSON.stringify(props.todo_store));
+    const { todos, filters } = props.todo_store;
+        
+    let filteredTodos = useMemo(() => {
+        switch (filters) {
+            case 'SHOW_ACTIVE':
+                return todos.filter(todo => !todo.completed)
+            case 'SHOW_COMPLETED':
+                return todos.filter(todo => todo.completed)
+            default:
+                return todos
+        }
+    }, [filters, todos])
 
     return (
         <ul className="todo-list">
-            {filteredTodos.map((todo, index) => {
+            {useMemo((todos) => filteredTodos.map((todo, index) => {
                return (
                 <TodoItem
                     key={index}
                     todo={todo}
-                    todos={props.todos}
-                    todoCompleted={props.todoCompleted} 
-                    removeTodo={props.removeTodo}
-                    editTodo={props.editTodo}
-                    setTodos={props.setTodos}
-                    saveTodo={props.saveTodo}
-                    canceleEditTodo={props.canceleEditTodo}
+                    todos={todos}
                 />
                )
-            })}
+            }), [filteredTodos])}
         </ul>
     );
 };
 
-export default TodoList;
+const mapStateToProps = store => {
+    return {todo_store: store}
+}
+
+const mapDispatchToProps = {}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TodoList);

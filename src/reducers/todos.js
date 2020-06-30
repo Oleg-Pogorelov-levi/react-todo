@@ -1,6 +1,6 @@
-const todo_list = JSON.parse(localStorage.getItem('todo')) || [];
+import { todo_store } from "../localStorage/localStorage"
 
-const todos = (state = todo_list, action) => {
+const todos = (state = todo_store.todos, action) => {
     switch (action.type) {
         case 'ADD_TODO':
             return [

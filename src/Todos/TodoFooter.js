@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Tabs, Tab, Button } from '@material-ui/core';
-import { getVisibleTodos } from '../selectors';
 import { setVisibilityFilter, clearCompleted } from '../actions';
 import { connect } from 'react-redux';
+import { createSelector } from "reselect";
+
+const getVisibilityFilter = state => state.visibilityFilter;
+const getTodos = state => state.todos;
+
+export const getVisibleTodos = createSelector(
+  [getVisibilityFilter, getTodos],
+  (visibilityFilter, todos) => {
+    switch (visibilityFilter) {
+        case "SHOW_COMPLETED":
+            return todos.filter(t => t.completed);
+        case "SHOW_ACTIVE":
+            return todos.filter(t => !t.completed);
+        default:
+            return todos;
+    }
+  }
+);
 
 function TodoFooter(props){
-    const leftTodos = props.todos.filter(todo => !todo.completed)
+    const leftTodos = useMemo( () => props.todos.filter(todo => !todo.completed), [props.todos])
     const [value, setValue] = React.useState(2);
 
     const handleChange = (event, newValue) => {
@@ -21,17 +38,17 @@ function TodoFooter(props){
                 onChange={handleChange}
                 aria-label="disabled tabs example"
             >
-                <Tab className="button-status" label="All" onClick={() => props.setVisibilityFilterAction('SHOW_ALL')} />
-                <Tab className="button-status" label="Active" onClick={() => props.setVisibilityFilterAction('SHOW_ACTIVE')} />
-                <Tab className="button-status" label="Completed" onClick={() => props.setVisibilityFilterAction('SHOW_COMPLETED')} />
+                <Tab className="button-status" label="All" onClick={() => props.setVisibilityFilter('SHOW_ALL')} />
+                <Tab className="button-status" label="Active" onClick={() => props.setVisibilityFilter('SHOW_ACTIVE')} />
+                <Tab className="button-status" label="Completed" onClick={() => props.setVisibilityFilter('SHOW_COMPLETED')} />
             </Tabs>
-            {props.todos.filter(todo => todo.completed).length ? 
+            {useMemo( () => props.todos.filter(todo => todo.completed).length, [props.todos]) ? 
                 <Button
                     size="small" 
                     variant="contained" 
                     color="primary"
                     className="button-clear"
-                    onClick={() => props.clearCompletedAction()}
+                    onClick={() => props.clearCompleted()}
                 >
                     Clear completed [{props.todos.filter(todo => todo.completed).length}]
                 </Button>
@@ -41,18 +58,14 @@ function TodoFooter(props){
     );
 };
 
-const mapStateToProps = store => {
-    return {todos: getVisibleTodos(store)}
+const mapStateToProps = store => ({todos: getVisibleTodos(store)})
+  
+const mapDispatchToProps = {
+        setVisibilityFilter,
+        clearCompleted
 }
   
-const mapDispatchToProps = dispatch => {
-    return {
-        setVisibilityFilterAction: (filter) => dispatch(setVisibilityFilter(filter)),
-        clearCompletedAction: () => dispatch(clearCompleted()),
-    }
-}
-  
-  export default connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-  )(TodoFooter);
+)(TodoFooter);

@@ -3,6 +3,8 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import { Checkbox, TextField } from '@material-ui/core';
 import RadioButtonUncheckedTwoToneIcon from '@material-ui/icons/RadioButtonUncheckedTwoTone';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { connect } from 'react-redux';
+import { removeTodo, editTodo, saveTodo, canceleEditTodo, toggleTodo } from '../actions';
 
 function TodoItem(props){
     const [value, setValue] = useState(props.todo.title);
@@ -41,7 +43,7 @@ function TodoItem(props){
                 <Checkbox 
                     icon={<RadioButtonUncheckedTwoToneIcon color="primary"/>} 
                     checkedIcon={<CheckCircleOutlineIcon />} color="primary"
-                    onChange={() => props.todoCompleted(props.todo.id)}
+                    onChange={() => props.toggleTodo(props.todo.id)}
                     checked={props.todo.completed} 
                 />
                 <p 
@@ -60,4 +62,19 @@ function TodoItem(props){
     }
 };
 
-export default TodoItem;
+const mapStateToProps = store => {
+    return store
+}
+
+const mapDispatchToProps = {
+        removeTodo,
+        editTodo,
+        saveTodo,
+        canceleEditTodo,
+        toggleTodo,
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TodoItem);

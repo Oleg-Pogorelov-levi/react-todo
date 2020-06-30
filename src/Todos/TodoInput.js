@@ -1,27 +1,40 @@
-import React, {useState} from 'react';
-import { TextField } from '@material-ui/core';
+import React from 'react';
+import { addTodo } from '../actions';
+import { connect } from 'react-redux';
 
-function TodoInput({addTodo}){
-    const [value, setValue] = useState('');
+function TodoInput(props){
 
     function createTodo(event){
-        if (event.keyCode === 13 && value.trim()){
-            addTodo(value, event)
-            setValue('')
+        if (event.keyCode === 13){
+            let input = document.querySelector('.input-todo')
+            if (input.value.trim()){
+                props.addTodo(input.value, event)
+                input.value = ''
+            }
         }
     }
 
     return (
-        <TextField
+        <input
+            className="input-todo"
             id="outlined-basic" 
             variant="outlined" 
             placeholder="What needs to be done?"
-            value={value} 
-            onChange={event => setValue(event.target.value)}
             onKeyDown={event => createTodo(event)} 
             tabIndex="0"
         />
     );
 };
 
-export default TodoInput;
+const mapStateToProps = store => {
+    return store
+  }
+  
+const mapDispatchToProps = {
+    addTodo
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TodoInput);
