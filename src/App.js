@@ -1,26 +1,57 @@
 import React from 'react';
-import logo from './logo.svg';
+import TodoTitle from './Todos/TodoTitle';
 import './App.css';
+import TodoInput from './Todos/TodoInput';
+import TodoList from './Todos/TodoList';
+import TodoFooter from './Todos/TodoFooter';
 
-function App() {
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { addTodo, removeTodo, editTodo, toggleTodo, saveTodo, canceleEditTodo } from './actions';
+import { connect } from 'react-redux';
+
+
+function App(props) {
+  localStorage.setItem('todo', JSON.stringify(props.todos));
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="sm" className="app">
+      <CssBaseline />
+      <TodoTitle />
+      <TodoInput addTodo={props.addTodoAction}/>
+      <TodoList 
+        todos={props.todos}
+        filters={props.filters}
+        todoCompleted={props.toggleTodoAction} 
+        removeTodo={props.removeTodoAction} 
+        editTodo={props.editTodoAction}
+        saveTodo={props.saveTodoAction}
+        canceleEditTodo={props.canceleEditTodoAction}
+      />
+      <TodoFooter 
+        todos={props.todos}
+        setVisibilityFilter={props.setVisibilityFilterAction}
+        clearCompletedTodos={props.clearCompletedAction}
+      />
+    </Container>
   );
+};
+
+const mapStateToProps = store => {
+  return store
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    addTodoAction: (title) => dispatch(addTodo(title)),
+    removeTodoAction: (id) => dispatch(removeTodo(id)),
+    editTodoAction: (id) => dispatch(editTodo(id)),
+    saveTodoAction: (id, value) => dispatch(saveTodo(id, value)),
+    canceleEditTodoAction: (id) => dispatch(canceleEditTodo(id)),
+    toggleTodoAction: (id) => dispatch(toggleTodo(id)),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
