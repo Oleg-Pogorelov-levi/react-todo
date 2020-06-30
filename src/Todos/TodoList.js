@@ -2,7 +2,6 @@ import React from 'react';
 import TodoItem from './TodoItem';
 
 function TodoList(props){
-    console.log('props list', props)
     let filteredTodos;
 
     if (props.filters === 'SHOW_ACTIVE') {

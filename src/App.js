@@ -7,13 +7,12 @@ import TodoFooter from './Todos/TodoFooter';
 
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { addTodo, removeTodo, editTodo, setVisibilityFilter, toggleTodo, saveTodo, canceleEditTodo, clearCompleted } from './actions';
+import { addTodo, removeTodo, editTodo, toggleTodo, saveTodo, canceleEditTodo } from './actions';
 import { connect } from 'react-redux';
 
 
 function App(props) {
   localStorage.setItem('todo', JSON.stringify(props.todos));
-
   return (
     <Container maxWidth="sm" className="app">
       <CssBaseline />
@@ -49,8 +48,6 @@ const mapDispatchToProps = dispatch => {
     saveTodoAction: (id, value) => dispatch(saveTodo(id, value)),
     canceleEditTodoAction: (id) => dispatch(canceleEditTodo(id)),
     toggleTodoAction: (id) => dispatch(toggleTodo(id)),
-    setVisibilityFilterAction: (filter) => dispatch(setVisibilityFilter(filter)),
-    clearCompletedAction: () => dispatch(clearCompleted()),
   }
 }
 

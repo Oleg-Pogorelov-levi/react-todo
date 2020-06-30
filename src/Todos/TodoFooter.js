@@ -1,5 +1,8 @@
 import React from 'react';
 import { Tabs, Tab, Button } from '@material-ui/core';
+import { getVisibleTodos } from '../selectors';
+import { setVisibilityFilter, clearCompleted } from '../actions';
+import { connect } from 'react-redux';
 
 function TodoFooter(props){
     const leftTodos = props.todos.filter(todo => !todo.completed)
@@ -18,9 +21,9 @@ function TodoFooter(props){
                 onChange={handleChange}
                 aria-label="disabled tabs example"
             >
-                <Tab className="button-status" label="All" onClick={() => props.setVisibilityFilter('SHOW_ALL')} />
-                <Tab className="button-status" label="Active" onClick={() => props.setVisibilityFilter('SHOW_ACTIVE')} />
-                <Tab className="button-status" label="Completed" onClick={() => props.setVisibilityFilter('SHOW_COMPLETED')} />
+                <Tab className="button-status" label="All" onClick={() => props.setVisibilityFilterAction('SHOW_ALL')} />
+                <Tab className="button-status" label="Active" onClick={() => props.setVisibilityFilterAction('SHOW_ACTIVE')} />
+                <Tab className="button-status" label="Completed" onClick={() => props.setVisibilityFilterAction('SHOW_COMPLETED')} />
             </Tabs>
             {props.todos.filter(todo => todo.completed).length ? 
                 <Button
@@ -28,7 +31,7 @@ function TodoFooter(props){
                     variant="contained" 
                     color="primary"
                     className="button-clear"
-                    onClick={() => props.clearCompletedTodos()}
+                    onClick={() => props.clearCompletedAction()}
                 >
                     Clear completed [{props.todos.filter(todo => todo.completed).length}]
                 </Button>
@@ -38,4 +41,18 @@ function TodoFooter(props){
     );
 };
 
-export default TodoFooter;
+const mapStateToProps = store => {
+    return {todos: getVisibleTodos(store)}
+}
+  
+const mapDispatchToProps = dispatch => {
+    return {
+        setVisibilityFilterAction: (filter) => dispatch(setVisibilityFilter(filter)),
+        clearCompletedAction: () => dispatch(clearCompleted()),
+    }
+}
+  
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(TodoFooter);
