@@ -17,17 +17,18 @@ function TodoList(props){
         }
     }, [filters, todos])
 
+    const todoItems = useMemo((todos) => filteredTodos.map((todo, index) => {
+        return (
+            <TodoItem
+                key={index}
+                todo={todo}
+            />
+        )
+    }), [filteredTodos])
+
     return (
         <ul className="todo-list">
-            {useMemo((todos) => filteredTodos.map((todo, index) => {
-               return (
-                <TodoItem
-                    key={index}
-                    todo={todo}
-                    todos={todos}
-                />
-               )
-            }), [filteredTodos])}
+            {todoItems}
         </ul>
     );
 };

@@ -25,16 +25,12 @@ function TodoInput(props){
         />
     );
 };
-
-const mapStateToProps = store => {
-    return store
-  }
   
 const mapDispatchToProps = {
     addTodo
 }
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(TodoInput);

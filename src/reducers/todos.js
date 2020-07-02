@@ -1,6 +1,11 @@
-import { todo_store } from "../localStorage/localStorage"
+const initialState = [{
+    id: null, 
+    title: '', 
+    completed: false, 
+    isEdit: false
+}]
 
-const todos = (state = todo_store.todos, action) => {
+const todos = (state = initialState, action) => {
     switch (action.type) {
         case 'ADD_TODO':
             return [

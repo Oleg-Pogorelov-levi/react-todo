@@ -22,9 +22,10 @@ export const getVisibleTodos = createSelector(
 );
 
 function TodoFooter(props){
-    const leftTodos = useMemo( () => props.todos.filter(todo => !todo.completed), [props.todos])
+    const { todos, setVisibilityFilter } = props;
+    const leftTodos = useMemo( () => todos.filter(todo => !todo.completed), [todos])
     const [value, setValue] = React.useState(2);
-    const completedTodo = props.todos.length - leftTodos.length;
+    const completedTodo = todos.length - leftTodos.length;
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -39,11 +40,11 @@ function TodoFooter(props){
                 onChange={handleChange}
                 aria-label="disabled tabs example"
             >
-                <Tab className="button-status" label="All" onClick={() => props.setVisibilityFilter('SHOW_ALL')} />
-                <Tab className="button-status" label="Active" onClick={() => props.setVisibilityFilter('SHOW_ACTIVE')} />
-                <Tab className="button-status" label="Completed" onClick={() => props.setVisibilityFilter('SHOW_COMPLETED')} />
+                <Tab className="button-status" label="All" onClick={() => setVisibilityFilter('SHOW_ALL')} />
+                <Tab className="button-status" label="Active" onClick={() => setVisibilityFilter('SHOW_ACTIVE')} />
+                <Tab className="button-status" label="Completed" onClick={() => setVisibilityFilter('SHOW_COMPLETED')} />
             </Tabs>
-            {useMemo( () => props.todos.filter(todo => todo.completed).length, [props.todos]) ? 
+            {useMemo( () => todos.filter(todo => todo.completed).length, [todos]) ? 
                 <Button
                     size="small" 
                     variant="contained" 

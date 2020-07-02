@@ -1,6 +1,10 @@
-import { todo_store } from "../localStorage/localStorage"
+import { visibilityFilters } from "../actions"
 
-const filters = (state = todo_store.filters, action) => {
+const initialState = {
+    filters: visibilityFilters.SHOW_ALL,
+}
+
+const filters = (state = initialState, action) => {
     switch (action.type) {
         case 'SET_VISIBILITY_FILTER':
             return action.filter

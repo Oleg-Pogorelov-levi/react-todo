@@ -62,10 +62,6 @@ function TodoItem(props){
     }
 };
 
-const mapStateToProps = store => {
-    return store
-}
-
 const mapDispatchToProps = {
         removeTodo,
         editTodo,
@@ -75,6 +71,6 @@ const mapDispatchToProps = {
 }
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(TodoItem);

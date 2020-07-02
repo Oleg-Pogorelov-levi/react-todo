@@ -5,18 +5,17 @@ import TodoInput from './Todos/TodoInput';
 import TodoList from './Todos/TodoList';
 import TodoFooter from './Todos/TodoFooter';
 
-import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 function App() {
   return (
-    <Container maxWidth="sm" className="app">
+    <div className="app">
       <CssBaseline />
       <TodoTitle />
       <TodoInput />
       <TodoList />
       <TodoFooter />
-    </Container>
+    </div>
   );
 };
 
